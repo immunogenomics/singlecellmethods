@@ -3,6 +3,5 @@
 importFrom(Rcpp,sourceCpp)
 importFrom(Rcpp,loadModule)
 export(findVariableGenes)
-export(exp_mean)
-export(log_vmr)
+useDynLib(singlecellmethods)
 importFrom(dplyr, "%>%")

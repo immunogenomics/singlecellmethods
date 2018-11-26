@@ -7,24 +7,24 @@
 using namespace Rcpp;
 
 // exp_mean
-arma::mat exp_mean(const arma::vec& x, const VECTYPE& p, const arma::vec& i, int ncol, int nrow, const uvec& groups, const uvec& group_sizes);
+arma::mat exp_mean(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, const arma::uvec& groups, const arma::uvec& group_sizes);
 RcppExport SEXP _singlecellmethods_exp_mean(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP groupsSEXP, SEXP group_sizesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const VECTYPE& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
     Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    Rcpp::traits::input_parameter< const uvec& >::type groups(groupsSEXP);
-    Rcpp::traits::input_parameter< const uvec& >::type group_sizes(group_sizesSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type groups(groupsSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type group_sizes(group_sizesSEXP);
     rcpp_result_gen = Rcpp::wrap(exp_mean(x, p, i, ncol, nrow, groups, group_sizes));
     return rcpp_result_gen;
 END_RCPP
 }
 // log_vmr
-arma::mat log_vmr(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, const arma::mat& means, const uvec& groups, const uvec& group_sizes);
+arma::mat log_vmr(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, const arma::mat& means, const arma::uvec& groups, const arma::uvec& group_sizes);
 RcppExport SEXP _singlecellmethods_log_vmr(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP meansSEXP, SEXP groupsSEXP, SEXP group_sizesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -35,8 +35,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type means(meansSEXP);
-    Rcpp::traits::input_parameter< const uvec& >::type groups(groupsSEXP);
-    Rcpp::traits::input_parameter< const uvec& >::type group_sizes(group_sizesSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type groups(groupsSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type group_sizes(group_sizesSEXP);
     rcpp_result_gen = Rcpp::wrap(log_vmr(x, p, i, ncol, nrow, means, groups, group_sizes));
     return rcpp_result_gen;
 END_RCPP

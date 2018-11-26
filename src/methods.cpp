@@ -59,7 +59,7 @@ arma::mat log_vmr(const arma::vec& x, const arma::vec& p, const arma::vec& i,
     }
     
     res = log(res / means);
-    res.replace(datum::nan, 0);
+    res.replace(arma::datum::nan, 0);
     
     return(res);
 }

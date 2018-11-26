@@ -3,7 +3,6 @@
 using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
-using namespace arma;
 
 //typedef arma::mat MATTYPE;
 //typedef arma::vec VECTYPE;
@@ -13,7 +12,7 @@ using namespace arma;
 
 
 // [[Rcpp::export]]
-arma::mat exp_mean(const arma::vec& x, const VECTYPE& p, const arma::vec& i, int ncol, int nrow, const uvec& groups, const uvec& group_sizes) {
+arma::mat exp_mean(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, const arma::uvec& groups, const arma::uvec& group_sizes) {
     int ngroups = group_sizes.n_elem;
     arma::mat res = arma::zeros<arma::mat>(nrow, ngroups);
     for (int c = 0; c < ncol; c++) {
@@ -37,7 +36,7 @@ arma::mat exp_mean(const arma::vec& x, const VECTYPE& p, const arma::vec& i, int
 // [[Rcpp::export]]
 arma::mat log_vmr(const arma::vec& x, const arma::vec& p, const arma::vec& i, 
                   int ncol, int nrow, const arma::mat& means,
-                  const uvec& groups, const uvec& group_sizes) {
+                  const arma::uvec& groups, const arma::uvec& group_sizes) {
     
     int ngroups = group_sizes.n_elem;
     arma::mat res = arma::zeros<arma::mat>(nrow, ngroups);

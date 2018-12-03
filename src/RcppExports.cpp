@@ -41,10 +41,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// normalizeCLR_dgc
+arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, int margin);
+RcppExport SEXP _singlecellmethods_normalizeCLR_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP marginSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< int >::type margin(marginSEXP);
+    rcpp_result_gen = Rcpp::wrap(normalizeCLR_dgc(x, p, i, ncol, nrow, margin));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_exp_mean", (DL_FUNC) &_singlecellmethods_exp_mean, 7},
     {"_singlecellmethods_log_vmr", (DL_FUNC) &_singlecellmethods_log_vmr, 8},
+    {"_singlecellmethods_normalizeCLR_dgc", (DL_FUNC) &_singlecellmethods_normalizeCLR_dgc, 6},
     {NULL, NULL, 0}
 };
 

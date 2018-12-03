@@ -9,3 +9,7 @@ log_vmr <- function(x, p, i, ncol, nrow, means, groups, group_sizes) {
     .Call('_singlecellmethods_log_vmr', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, means, groups, group_sizes)
 }
 
+normalizeCLR_dgc <- function(x, p, i, ncol, nrow, margin) {
+    .Call('_singlecellmethods_normalizeCLR_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, margin)
+}
+

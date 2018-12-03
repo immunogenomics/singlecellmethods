@@ -68,6 +68,49 @@ arma::mat log_vmr(const arma::vec& x, const arma::vec& p, const arma::vec& i,
     return(res);
 }
 
+// [[Rcpp::export]]
+arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, int margin) {    
+    arma::vec res = x;
+    if (margin == 1) {
+        // first compute scaling factors for each row
+        arma::vec geo_mean = arma::zeros<arma::vec>(nrow);
+        for (int c = 0; c < ncol; c++) {
+            for (int j = p[c]; j < p[c + 1]; j++) {
+                // i[j] gives the row num
+                geo_mean(i[j]) += std::log1p(x[j]);
+            }
+        }
+        for (int i = 0; i < nrow; i++) {
+//            geo_mean(i) = (geo_mean(i) / (1 + ncol));    
+            geo_mean(i) = std::exp(geo_mean(i) / (1 + ncol));    
+        }
+        // then  scale data
+        for (int c = 0; c < ncol; c++) {
+            for (int j = p[c]; j < p[c + 1]; j++) {
+                res(j) = std::log1p(res(j) / geo_mean(i[j]));
+            }
+        }        
+    } else {
+        // first compute scaling factors for each column
+        arma::vec geo_mean = arma::zeros<arma::vec>(ncol);
+        for (int c = 0; c < ncol; c++) {
+            for (int j = p[c]; j < p[c + 1]; j++) {
+                geo_mean(c) += std::log1p(x[j]);
+            }
+            // ... fill this spot 
+        }
+        
+        // then  scale data
+        for (int c = 0; c < ncol; c++) {
+            for (int j = p[c]; j < p[c + 1]; j++) {
+                res(j) = std::log1p(res(j) / geo_mean(c));
+            }
+        }        
+        
+    }
+    
+    return res;
+}
 
 /*
 // [[Rcpp::export]]

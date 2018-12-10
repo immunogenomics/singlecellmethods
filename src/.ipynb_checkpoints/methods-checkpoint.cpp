@@ -82,7 +82,7 @@ arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::v
         }
         for (int i = 0; i < nrow; i++) {
 //            geo_mean(i) = (geo_mean(i) / (1 + ncol));    
-            geo_mean(i) = std::exp(geo_mean(i) / (1 + ncol));    
+            geo_mean(i) = std::exp(geo_mean(i) / ncol);    
         }
         // then  scale data
         for (int c = 0; c < ncol; c++) {
@@ -97,7 +97,7 @@ arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::v
             for (int j = p[c]; j < p[c + 1]; j++) {
                 geo_mean(c) += std::log1p(x[j]);
             }
-            // ... fill this spot 
+            geo_mean(c) = std::exp(geo_mean(c) / nrow);
         }
         
         // then  scale data

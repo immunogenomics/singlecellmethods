@@ -1,4 +1,6 @@
 normalizeData <- function(A, scaling_factor = 1e4, method) {
+    if(!'dgCMatrix' %in% class(A)) A <- as(A, "dgCMatrix")
+    
     if (method == "log") {
         A@x <- A@x / rep.int(Matrix::colSums(A), diff(A@p))
         A@x <- scaling_factor * A@x

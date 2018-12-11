@@ -1,5 +1,6 @@
 findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf, 
-                              min_dispersion = 0, max_dispersion = Inf, return_top_n = 0) {
+                               min_dispersion = 0, max_dispersion = Inf, 
+                               num.bin = 20, binning.method = "equal_width", return_top_n = 0) {
     ## TODO: check that groups are 0 indexed
     groups <- factor(groups)
     groups_int <- as.integer(factor(groups)) - 1
@@ -23,17 +24,37 @@ findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf,
             tibble::rownames_to_column("symbol") %>% 
             tidyr::gather(group, gene_dispersion, -symbol), 
         by = c("symbol", "group")
-    ) %>% 
-        dplyr::arrange(-gene_dispersion) %>% 
-        subset(gene_mean >= min_expr & gene_mean <= max_expr) %>%
-        subset(gene_dispersion >= min_dispersion & gene_dispersion <= max_dispersion)    
+    )
     
-    if (return_top_n > 0) {
-        vargenes_union <- unique(data.table(vargenes_df)[, head(.SD, return_top_n), by = group][, symbol])
-        return(vargenes_union)
-    } else {
-        return(vargenes_df)
+    if (num.bin > 0) {
+        if (binning.method == "equal_width") {
+            .breaks <- num.bin
+        }
+        else if (binning.method == "equal_frequency") {
+            .breaks <- c(-1, quantile(vargenes_df$gene_mean[vargenes_df$gene_mean > 0], probs = seq(0, 1, length.out = num.bin)))
+        }
+        else {
+            stop(paste0("Invalid selection: '", binning.method, "' for 'binning.method'."))
+        }
+        
+        vargenes_df <- data.table(vargenes_df)[
+            , the_bin := cut(gene_mean, .breaks), by = group
+        ][
+            , gene_dispersion_scaled := scale(gene_dispersion), by = .(the_bin, group)
+        ][, the_bin := NULL] %>% data.table
     }
     
-}
+    vargenes_df <- vargenes_df %>% 
+        dplyr::arrange(-gene_dispersion) %>% 
+        subset(gene_mean >= min_expr & gene_mean <= max_expr) %>%
+        subset(gene_dispersion >= min_dispersion & gene_dispersion <= max_dispersion) 
 
+    return(vargenes_df)
+#     if (return_top_n > 0) {
+#         vargenes_union <- unique(data.table(vargenes_df)[, head(.SD, return_top_n), by = group][, symbol])
+#         return(vargenes_union)
+#     } else {
+#         return(vargenes_df)
+#     }
+    
+}

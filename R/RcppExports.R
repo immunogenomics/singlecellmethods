@@ -13,3 +13,7 @@ normalizeCLR_dgc <- function(x, p, i, ncol, nrow, margin) {
     .Call('_singlecellmethods_normalizeCLR_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, margin)
 }
 
+scaleRows_dgc <- function(x, p, i, ncol, nrow, thresh) {
+    .Call('_singlecellmethods_scaleRows_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, thresh)
+}
+

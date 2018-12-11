@@ -57,11 +57,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// scaleRows_dgc
+arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, float thresh);
+RcppExport SEXP _singlecellmethods_scaleRows_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP threshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< float >::type thresh(threshSEXP);
+    rcpp_result_gen = Rcpp::wrap(scaleRows_dgc(x, p, i, ncol, nrow, thresh));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_exp_mean", (DL_FUNC) &_singlecellmethods_exp_mean, 7},
     {"_singlecellmethods_log_vmr", (DL_FUNC) &_singlecellmethods_log_vmr, 8},
     {"_singlecellmethods_normalizeCLR_dgc", (DL_FUNC) &_singlecellmethods_normalizeCLR_dgc, 6},
+    {"_singlecellmethods_scaleRows_dgc", (DL_FUNC) &_singlecellmethods_scaleRows_dgc, 6},
     {NULL, NULL, 0}
 };
 

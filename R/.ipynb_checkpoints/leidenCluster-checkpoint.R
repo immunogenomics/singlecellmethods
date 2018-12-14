@@ -21,10 +21,10 @@ leidenCluster <- function(snn, resolution_list, min_cluster_size = 20, verbose =
         return(cres)
     }))
     
-    if (max(1 + ceiling(-log10(resolution_list))) > 4) {
-        message("WARNING: colnames may not have enough precision")
-    }
+#     if (max(1 + ceiling(-log10(resolution_list))) > 4) {
+#         message("WARNING: colnames may not have enough precision")
+#     }
 
-    colnames(.res) <- sprintf("res_%0.4f", resolution_list)
+    colnames(.res) <- sprintf("res_%0.4e", resolution_list)
     return(as.data.frame(.res))    
 }

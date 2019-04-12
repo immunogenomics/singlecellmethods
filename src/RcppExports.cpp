@@ -73,12 +73,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cosine_normalize_cpp
+arma::mat cosine_normalize_cpp(arma::mat& V, int dim);
+RcppExport SEXP _singlecellmethods_cosine_normalize_cpp(SEXP VSEXP, SEXP dimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cosine_normalize_cpp(V, dim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// merge_redundant_clusters
+arma::mat merge_redundant_clusters(const arma::mat& R, float thresh);
+RcppExport SEXP _singlecellmethods_merge_redundant_clusters(SEXP RSEXP, SEXP threshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);
+    Rcpp::traits::input_parameter< float >::type thresh(threshSEXP);
+    rcpp_result_gen = Rcpp::wrap(merge_redundant_clusters(R, thresh));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_exp_mean", (DL_FUNC) &_singlecellmethods_exp_mean, 7},
     {"_singlecellmethods_log_vmr", (DL_FUNC) &_singlecellmethods_log_vmr, 8},
     {"_singlecellmethods_normalizeCLR_dgc", (DL_FUNC) &_singlecellmethods_normalizeCLR_dgc, 6},
     {"_singlecellmethods_scaleRows_dgc", (DL_FUNC) &_singlecellmethods_scaleRows_dgc, 6},
+    {"_singlecellmethods_cosine_normalize_cpp", (DL_FUNC) &_singlecellmethods_cosine_normalize_cpp, 2},
+    {"_singlecellmethods_merge_redundant_clusters", (DL_FUNC) &_singlecellmethods_merge_redundant_clusters, 2},
     {NULL, NULL, 0}
 };
 

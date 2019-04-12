@@ -17,3 +17,11 @@ scaleRows_dgc <- function(x, p, i, ncol, nrow, thresh) {
     .Call('_singlecellmethods_scaleRows_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, thresh)
 }
 
+cosine_normalize_cpp <- function(V, dim) {
+    .Call('_singlecellmethods_cosine_normalize_cpp', PACKAGE = 'singlecellmethods', V, dim)
+}
+
+merge_redundant_clusters <- function(R, thresh = 0.8) {
+    .Call('_singlecellmethods_merge_redundant_clusters', PACKAGE = 'singlecellmethods', R, thresh)
+}
+

@@ -159,6 +159,15 @@ arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec&
 }
 
 
+// [[Rcpp::export]]
+arma::mat cosine_normalize_cpp(arma::mat & V, int dim) {
+  // norm rows: dim=1
+  // norm cols: dim=0 or dim=2
+  if (dim == 2) dim = 0;
+  return arma::normalise(V, 2, dim);
+}
+
+
 /*
 // [[Rcpp::export]]
 float Hbeta(arma::mat& D, float beta, arma::vec& P, int idx) {
@@ -226,11 +235,32 @@ arma::vec compute_simpson_index(arma::mat& D, arma::umat& knn_idx, arma::vec& ba
   return(simpson);
 }
 
-
-
-
-
-
-
-
 */
+
+// [[Rcpp::export]]
+arma::mat merge_redundant_clusters(const arma::mat & R, float thresh = 0.8) {
+  arma::mat cor_res = arma::cor(R.t());
+  int K = R.n_rows;
+  
+  // define equivalence classes  
+  arma::uvec equiv_classes = arma::linspace<arma::uvec>(0, K - 1, K);
+  int new_idx;
+  for (int i = 0; i < K - 1; i++) {
+    for (int j = i + 1; j < K; j++) {
+      if (cor_res(i, j) > thresh) {
+          new_idx = std::min(equiv_classes(i), equiv_classes(j));
+          equiv_classes(i) = new_idx;
+          equiv_classes(j) = new_idx;
+      }
+    }
+  }
+
+  // sum over equivalence classes
+  arma::uvec uclasses = arma::unique(equiv_classes);
+  arma::mat R_new = arma::zeros<arma::mat>(uclasses.n_elem, R.n_cols); 
+  for (int i = 0; i < R_new.n_rows; i++) {
+      arma::uvec idx = arma::find(equiv_classes == uclasses(i)); 
+      R_new.row(i) = arma::sum(R.rows(idx), 0);
+  }
+  return R_new;  
+}

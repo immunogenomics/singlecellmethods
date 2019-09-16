@@ -112,6 +112,7 @@ arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::v
     return res;
 }
 
+
 // [[Rcpp::export]]
 arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, 
                         int ncol, int nrow, float thresh) {
@@ -158,6 +159,31 @@ arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec&
     return res;
 }
 
+
+// [[Rcpp::export]]
+arma::mat rowSDs_dgc(const arma::vec& x, const arma::vec& p, 
+                     const arma::vec& i, const arma::vec mean_vec, 
+                     int ncol, int nrow) {
+
+    arma::vec sd_vec = arma::zeros<arma::vec>(nrow);
+    arma::uvec nz = arma::zeros<arma::uvec>(nrow);
+    nz.fill(ncol);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            sd_vec(i[j]) += (x[j] - mean_vec(i[j])) * (x[j] - mean_vec(i[j])); // (x - mu)^2
+            nz(i[j])--;
+        }
+    }
+    
+    // count for the zeros
+    for (int r = 0; r < nrow; r++) {
+        sd_vec(r) += nz(r) * mean_vec(r) * mean_vec(r);
+    }
+    
+    sd_vec = arma::sqrt(sd_vec / (ncol - 1));
+    
+    return sd_vec;
+}
 
 // [[Rcpp::export]]
 arma::mat cosine_normalize_cpp(arma::mat & V, int dim) {

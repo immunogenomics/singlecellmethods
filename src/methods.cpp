@@ -113,6 +113,28 @@ arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::v
 }
 
 
+
+// [[Rcpp::export]]
+arma::mat scaleRowsWithStats_dgc(const arma::vec& x, const arma::vec& p, 
+                                 const arma::vec& i, const arma::vec& mean_vec,
+                                 const arma::vec& sd_vec, int ncol, int nrow, 
+                                 float thresh) {
+    // fill in non-zero elements
+    arma::mat res = arma::zeros<arma::mat>(nrow, ncol);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            res(i[j], c) = x(j);
+        }
+    }
+    // scale rows with given means and SDs
+    res.each_col() -= mean_vec;
+    res.each_col() /= sd_vec;
+    res.elem(find(res > thresh)).fill(thresh);
+    res.elem(find(res < -thresh)).fill(-thresh);
+    return res;
+}
+
+
 // [[Rcpp::export]]
 arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, 
                         int ncol, int nrow, float thresh) {

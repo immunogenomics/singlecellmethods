@@ -15,10 +15,10 @@ findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf,
 
     ## transform means to logspace and join means and VMR  
     vargenes_df <- dplyr::inner_join(
-        means_nonlog %>% log1p %>% tibble() %>% 
+        means_nonlog %>% log1p %>% as_tibble() %>% 
             cbind(symbol = row.names(X)) %>% 
             tidyr::gather(group, gene_mean, -symbol),
-        vmr %>% tibble() %>% 
+        vmr %>% as_tibble() %>% 
             cbind(symbol = row.names(X)) %>% 
             tidyr::gather(group, gene_dispersion, -symbol), 
         by = c("symbol", "group")

@@ -13,8 +13,16 @@ normalizeCLR_dgc <- function(x, p, i, ncol, nrow, margin) {
     .Call('_singlecellmethods_normalizeCLR_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, margin)
 }
 
+scaleRowsWithStats_dgc <- function(x, p, i, mean_vec, sd_vec, ncol, nrow, thresh) {
+    .Call('_singlecellmethods_scaleRowsWithStats_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, sd_vec, ncol, nrow, thresh)
+}
+
 scaleRows_dgc <- function(x, p, i, ncol, nrow, thresh) {
     .Call('_singlecellmethods_scaleRows_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, thresh)
+}
+
+rowSDs_dgc <- function(x, p, i, mean_vec, ncol, nrow) {
+    .Call('_singlecellmethods_rowSDs_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, ncol, nrow)
 }
 
 cosine_normalize_cpp <- function(V, dim) {

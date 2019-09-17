@@ -57,6 +57,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// scaleRowsWithStats_dgc
+arma::mat scaleRowsWithStats_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& mean_vec, const arma::vec& sd_vec, int ncol, int nrow, float thresh);
+RcppExport SEXP _singlecellmethods_scaleRowsWithStats_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP sd_vecSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP threshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_vec(mean_vecSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type sd_vec(sd_vecSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< float >::type thresh(threshSEXP);
+    rcpp_result_gen = Rcpp::wrap(scaleRowsWithStats_dgc(x, p, i, mean_vec, sd_vec, ncol, nrow, thresh));
+    return rcpp_result_gen;
+END_RCPP
+}
 // scaleRows_dgc
 arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, float thresh);
 RcppExport SEXP _singlecellmethods_scaleRows_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP threshSEXP) {
@@ -70,6 +88,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
     Rcpp::traits::input_parameter< float >::type thresh(threshSEXP);
     rcpp_result_gen = Rcpp::wrap(scaleRows_dgc(x, p, i, ncol, nrow, thresh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rowSDs_dgc
+arma::mat rowSDs_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec mean_vec, int ncol, int nrow);
+RcppExport SEXP _singlecellmethods_rowSDs_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP ncolSEXP, SEXP nrowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mean_vec(mean_vecSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowSDs_dgc(x, p, i, mean_vec, ncol, nrow));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -102,7 +136,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_exp_mean", (DL_FUNC) &_singlecellmethods_exp_mean, 7},
     {"_singlecellmethods_log_vmr", (DL_FUNC) &_singlecellmethods_log_vmr, 8},
     {"_singlecellmethods_normalizeCLR_dgc", (DL_FUNC) &_singlecellmethods_normalizeCLR_dgc, 6},
+    {"_singlecellmethods_scaleRowsWithStats_dgc", (DL_FUNC) &_singlecellmethods_scaleRowsWithStats_dgc, 8},
     {"_singlecellmethods_scaleRows_dgc", (DL_FUNC) &_singlecellmethods_scaleRows_dgc, 6},
+    {"_singlecellmethods_rowSDs_dgc", (DL_FUNC) &_singlecellmethods_rowSDs_dgc, 6},
     {"_singlecellmethods_cosine_normalize_cpp", (DL_FUNC) &_singlecellmethods_cosine_normalize_cpp, 2},
     {"_singlecellmethods_merge_redundant_clusters", (DL_FUNC) &_singlecellmethods_merge_redundant_clusters, 2},
     {NULL, NULL, 0}

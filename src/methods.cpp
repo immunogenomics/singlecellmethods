@@ -183,7 +183,7 @@ arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec&
 
 
 // [[Rcpp::export]]
-arma::mat rowSDs_dgc(const arma::vec& x, const arma::vec& p, 
+arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, 
                      const arma::vec& i, const arma::vec mean_vec, 
                      int ncol, int nrow) {
 

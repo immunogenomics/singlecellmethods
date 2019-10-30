@@ -2,6 +2,7 @@
 
 importFrom(Rcpp,sourceCpp)
 importFrom(Rcpp,loadModule)
+importFrom(data.table,data.table)
 export(findVariableGenes)
 export(normalizeData)
 export(leidenCluster)

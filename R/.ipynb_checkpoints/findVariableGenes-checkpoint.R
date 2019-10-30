@@ -35,12 +35,15 @@ findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf,
             stop(paste0("Invalid selection: '", binning.method, "' for 'binning.method'."))
         }
         
-#         vargenes_df <- data.table::data.table(vargenes_df)
         vargenes_df <- data.table(vargenes_df)[
             , the_bin := cut(gene_mean, .breaks), by = group
-        ][
+        ][]
+        
+        vargenes_df <- data.table(vargenes_df)[
             , gene_dispersion_scaled := scale(gene_dispersion), by = .(the_bin, group)
-        ][, the_bin := NULL][]
+        ][]
+        
+        vargenes_df <- data.table(vargenes_df)[, the_bin := NULL][]
     }
     
     vargenes_df <- vargenes_df %>% 

@@ -15,10 +15,10 @@ findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf,
 
     ## transform means to logspace and join means and VMR  
     vargenes_df <- dplyr::inner_join(
-        means_nonlog %>% log1p %>% tibble() %>% 
+        means_nonlog %>% log1p %>% as_tibble() %>% 
             cbind(symbol = row.names(X)) %>% 
             tidyr::gather(group, gene_mean, -symbol),
-        vmr %>% tibble() %>% 
+        vmr %>% as_tibble() %>% 
             cbind(symbol = row.names(X)) %>% 
             tidyr::gather(group, gene_dispersion, -symbol), 
         by = c("symbol", "group")
@@ -35,11 +35,12 @@ findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf,
             stop(paste0("Invalid selection: '", binning.method, "' for 'binning.method'."))
         }
         
+        vargenes_df <- data.table::data.table(vargenes_df)
         vargenes_df <- data.table(vargenes_df)[
             , the_bin := cut(gene_mean, .breaks), by = group
         ][
             , gene_dispersion_scaled := scale(gene_dispersion), by = .(the_bin, group)
-        ][, the_bin := NULL] %>% data.table
+        ][, the_bin := NULL][]
     }
     
     vargenes_df <- vargenes_df %>% 

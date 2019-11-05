@@ -112,6 +112,29 @@ arma::vec normalizeCLR_dgc(const arma::vec& x, const arma::vec& p, const arma::v
     return res;
 }
 
+
+
+// [[Rcpp::export]]
+arma::mat scaleRowsWithStats_dgc(const arma::vec& x, const arma::vec& p, 
+                                 const arma::vec& i, const arma::vec& mean_vec,
+                                 const arma::vec& sd_vec, int ncol, int nrow, 
+                                 float thresh) {
+    // fill in non-zero elements
+    arma::mat res = arma::zeros<arma::mat>(nrow, ncol);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            res(i[j], c) = x(j);
+        }
+    }
+    // scale rows with given means and SDs
+    res.each_col() -= mean_vec;
+    res.each_col() /= sd_vec;
+    res.elem(find(res > thresh)).fill(thresh);
+    res.elem(find(res < -thresh)).fill(-thresh);
+    return res;
+}
+
+
 // [[Rcpp::export]]
 arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, 
                         int ncol, int nrow, float thresh) {
@@ -160,6 +183,31 @@ arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec&
 
 
 // [[Rcpp::export]]
+arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, 
+                     const arma::vec& i, const arma::vec mean_vec, 
+                     int ncol, int nrow) {
+
+    arma::vec sd_vec = arma::zeros<arma::vec>(nrow);
+    arma::uvec nz = arma::zeros<arma::uvec>(nrow);
+    nz.fill(ncol);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            sd_vec(i[j]) += (x[j] - mean_vec(i[j])) * (x[j] - mean_vec(i[j])); // (x - mu)^2
+            nz(i[j])--;
+        }
+    }
+    
+    // count for the zeros
+    for (int r = 0; r < nrow; r++) {
+        sd_vec(r) += nz(r) * mean_vec(r) * mean_vec(r);
+    }
+    
+    sd_vec = arma::sqrt(sd_vec / (ncol - 1));
+    
+    return sd_vec;
+}
+
+// [[Rcpp::export]]
 arma::mat cosine_normalize_cpp(arma::mat & V, int dim) {
   // norm rows: dim=1
   // norm cols: dim=0 or dim=2
@@ -167,6 +215,27 @@ arma::mat cosine_normalize_cpp(arma::mat & V, int dim) {
   return arma::normalise(V, 2, dim);
 }
 
+// [[Rcpp::export]]
+List soft_kmeans_cpp(arma::mat Y, arma::mat Z, unsigned max_iter, float sigma) {
+    Y = arma::normalise(Y, 2, 0); // L2 normalize the columns
+    Z = arma::normalise(Z, 2, 0); // L2 normalize the columns
+//     arma::mat Z_cos = arma::normalise(Z, 2, 0); // L2 normalize the columns
+    arma::mat R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
+    
+    for (unsigned i = 0; i < max_iter; i++) {
+        arma::mat R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
+        R.each_row() -= arma::max(R, 0);  
+        R = exp(R);
+        R.each_row() /= arma::sum(R, 0);
+        Y = arma::normalise(Z * R.t(), 2, 0); 
+    }
+
+//     List result(2);
+    
+    List result = List::create(Named("R") = R , _["Y"] = Y);
+    return result;
+    
+}
 
 /*
 // [[Rcpp::export]]

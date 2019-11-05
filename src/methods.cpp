@@ -215,6 +215,27 @@ arma::mat cosine_normalize_cpp(arma::mat & V, int dim) {
   return arma::normalise(V, 2, dim);
 }
 
+// [[Rcpp::export]]
+List soft_kmeans_cpp(arma::mat Y, arma::mat Z, unsigned max_iter, float sigma) {
+    Y = arma::normalise(Y, 2, 0); // L2 normalize the columns
+    Z = arma::normalise(Z, 2, 0); // L2 normalize the columns
+//     arma::mat Z_cos = arma::normalise(Z, 2, 0); // L2 normalize the columns
+    arma::mat R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
+    
+    for (unsigned i = 0; i < max_iter; i++) {
+        arma::mat R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
+        R.each_row() -= arma::max(R, 0);  
+        R = exp(R);
+        R.each_row() /= arma::sum(R, 0);
+        Y = arma::normalise(Z * R.t(), 2, 0); 
+    }
+
+//     List result(2);
+    
+    List result = List::create(Named("R") = R , _["Y"] = Y);
+    return result;
+    
+}
 
 /*
 // [[Rcpp::export]]

@@ -92,7 +92,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rowSDs_dgc
-arma::mat rowSDs_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec mean_vec, int ncol, int nrow);
+arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec mean_vec, int ncol, int nrow);
 RcppExport SEXP _singlecellmethods_rowSDs_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP ncolSEXP, SEXP nrowSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -119,6 +119,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// soft_kmeans_cpp
+List soft_kmeans_cpp(arma::mat Y, arma::mat Z, unsigned max_iter, float sigma);
+RcppExport SEXP _singlecellmethods_soft_kmeans_cpp(SEXP YSEXP, SEXP ZSEXP, SEXP max_iterSEXP, SEXP sigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< float >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(soft_kmeans_cpp(Y, Z, max_iter, sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
 // merge_redundant_clusters
 arma::mat merge_redundant_clusters(const arma::mat& R, float thresh);
 RcppExport SEXP _singlecellmethods_merge_redundant_clusters(SEXP RSEXP, SEXP threshSEXP) {
@@ -140,6 +154,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_scaleRows_dgc", (DL_FUNC) &_singlecellmethods_scaleRows_dgc, 6},
     {"_singlecellmethods_rowSDs_dgc", (DL_FUNC) &_singlecellmethods_rowSDs_dgc, 6},
     {"_singlecellmethods_cosine_normalize_cpp", (DL_FUNC) &_singlecellmethods_cosine_normalize_cpp, 2},
+    {"_singlecellmethods_soft_kmeans_cpp", (DL_FUNC) &_singlecellmethods_soft_kmeans_cpp, 4},
     {"_singlecellmethods_merge_redundant_clusters", (DL_FUNC) &_singlecellmethods_merge_redundant_clusters, 2},
     {NULL, NULL, 0}
 };

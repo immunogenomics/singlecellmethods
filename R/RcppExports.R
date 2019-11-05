@@ -29,6 +29,10 @@ cosine_normalize_cpp <- function(V, dim) {
     .Call('_singlecellmethods_cosine_normalize_cpp', PACKAGE = 'singlecellmethods', V, dim)
 }
 
+soft_kmeans_cpp <- function(Y, Z, max_iter, sigma) {
+    .Call('_singlecellmethods_soft_kmeans_cpp', PACKAGE = 'singlecellmethods', Y, Z, max_iter, sigma)
+}
+
 merge_redundant_clusters <- function(R, thresh = 0.8) {
     .Call('_singlecellmethods_merge_redundant_clusters', PACKAGE = 'singlecellmethods', R, thresh)
 }

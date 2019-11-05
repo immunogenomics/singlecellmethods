@@ -220,10 +220,10 @@ List soft_kmeans_cpp(arma::mat Y, arma::mat Z, unsigned max_iter, float sigma) {
     Y = arma::normalise(Y, 2, 0); // L2 normalize the columns
     Z = arma::normalise(Z, 2, 0); // L2 normalize the columns
 //     arma::mat Z_cos = arma::normalise(Z, 2, 0); // L2 normalize the columns
-    arma::mat R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
+    arma::mat R;// = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
     
     for (unsigned i = 0; i < max_iter; i++) {
-        arma::mat R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
+        R = -2 * (1 - Y.t() * Z) / sigma; // dist_mat 
         R.each_row() -= arma::max(R, 0);  
         R = exp(R);
         R.each_row() /= arma::sum(R, 0);

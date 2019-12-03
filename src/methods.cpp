@@ -183,8 +183,25 @@ arma::mat scaleRows_dgc(const arma::vec& x, const arma::vec& p, const arma::vec&
 
 
 // [[Rcpp::export]]
+arma::vec rowMeansWeighted_dgc(const arma::vec& x, const arma::vec& p, 
+                     const arma::vec& i, const arma::vec& weights,
+                     int ncol, int nrow) {
+
+    arma::vec res = arma::zeros<arma::vec>(nrow);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            res[i[j]] += x[j] * weights[c];
+        }
+    }
+    
+    res /= arma::accu(weights);    
+    return res;
+}
+
+
+// [[Rcpp::export]]
 arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, 
-                     const arma::vec& i, const arma::vec mean_vec, 
+                     const arma::vec& i, const arma::vec& mean_vec, 
                      int ncol, int nrow) {
 
     arma::vec sd_vec = arma::zeros<arma::vec>(nrow);
@@ -204,8 +221,37 @@ arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p,
     
     sd_vec = arma::sqrt(sd_vec / (ncol - 1));
     
+    return sd_vec;    
+}
+
+
+// [[Rcpp::export]]
+arma::vec rowSDsWeighted_dgc(const arma::vec& x, const arma::vec& p, 
+                     const arma::vec& i, const arma::vec& mean_vec, 
+                     const arma::vec& weights, 
+                     int ncol, int nrow) {
+
+    arma::vec sd_vec = arma::zeros<arma::vec>(nrow);
+    double sum_weights = arma::accu(weights);
+    arma::vec nz = arma::zeros<arma::vec>(nrow);
+    nz.fill(sum_weights);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            sd_vec(i[j]) += weights[c] * (x[j] - mean_vec(i[j])) * (x[j] - mean_vec(i[j])); // w * (x - mu)^2
+            nz(i[j]) -= weights[c];
+        }
+    }
+    
+    // count for the zeros
+    for (int r = 0; r < nrow; r++) {
+        sd_vec(r) += nz(r) * mean_vec(r) * mean_vec(r);
+    }
+
+    sd_vec *= sum_weights / (sum_weights * sum_weights - arma::accu(weights % weights));
+    sd_vec = arma::sqrt(sd_vec);
     return sd_vec;
 }
+
 
 // [[Rcpp::export]]
 arma::mat cosine_normalize_cpp(arma::mat & V, int dim) {

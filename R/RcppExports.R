@@ -21,8 +21,16 @@ scaleRows_dgc <- function(x, p, i, ncol, nrow, thresh) {
     .Call('_singlecellmethods_scaleRows_dgc', PACKAGE = 'singlecellmethods', x, p, i, ncol, nrow, thresh)
 }
 
+rowMeansWeighted_dgc <- function(x, p, i, weights, ncol, nrow) {
+    .Call('_singlecellmethods_rowMeansWeighted_dgc', PACKAGE = 'singlecellmethods', x, p, i, weights, ncol, nrow)
+}
+
 rowSDs_dgc <- function(x, p, i, mean_vec, ncol, nrow) {
     .Call('_singlecellmethods_rowSDs_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, ncol, nrow)
+}
+
+rowSDsWeighted_dgc <- function(x, p, i, mean_vec, weights, ncol, nrow) {
+    .Call('_singlecellmethods_rowSDsWeighted_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, weights, ncol, nrow)
 }
 
 cosine_normalize_cpp <- function(V, dim) {

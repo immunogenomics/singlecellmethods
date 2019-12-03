@@ -24,8 +24,8 @@ weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
     ## weighted z-scores
 #     mu <- X %>% apply(1, function(x) {SDMTools:::wt.mean(x, weights)})
 #     sig <- X %>% apply(1, function(x) {SDMTools:::wt.sd(x, weights)})
-    mu <- singlecellmethods::rowMeans(X, weights = weights)
-    sig <- singlecellmethods::rowSDs(X, weights = weights)
+    mu <- singlecellmethods:::rowMeans(X, weights = weights)
+    sig <- singlecellmethods:::rowSDs(X, weights = weights)
     
     X <- scaleDataWithStats(X, mu, sig) 
     X <- X[which(is.na(rowSums(X)) == 0), ]

@@ -1,3 +1,4 @@
+#' @export
 normalizeData <- function(A, scaling_factor = 1e4, method) {
     if(!'dgCMatrix' %in% class(A)) A <- as(A, "dgCMatrix")
     

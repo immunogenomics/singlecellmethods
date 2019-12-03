@@ -1,3 +1,4 @@
+#' @export
 findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf, 
                                min_dispersion = 0, max_dispersion = Inf, 
                                num.bin = 20, binning.method = "equal_width", return_top_n = 0) {

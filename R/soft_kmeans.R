@@ -1,4 +1,5 @@
 ## colums are observations
+#' @export
 soft_kmeans <- function(X, k, max_iter=20, sigma=0.1) {
     message('WARNING: soft_kmeans fxn uses cosine distance only')
     Z <- cosine_normalize_cpp(X, 2)

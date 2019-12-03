@@ -1,4 +1,5 @@
 ## TODO: re-cluster NA points
+#' @export
 leidenCluster <- function(snn, resolution_list, min_cluster_size = 20, verbose = TRUE, pythondir) {
     library(reticulate)
     use_python(pythondir)

@@ -1,5 +1,6 @@
+#' @export
 weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
-    if (!equals(length(y), ncol(X))) {
+    if (!identical(length(y), ncol(X))) {
         stop('Columns in X must match length of y')
     }
     

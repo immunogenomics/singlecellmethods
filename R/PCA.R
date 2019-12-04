@@ -24,7 +24,7 @@ weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
     ## weighted z-scores
 #     mu <- X %>% apply(1, function(x) {SDMTools:::wt.mean(x, weights)})
 #     sig <- X %>% apply(1, function(x) {SDMTools:::wt.sd(x, weights)})
-    mu <- rowMeans(X, weights = weights)
+    mu <- Matrix::rowMeans(X, weights = weights)
     sig <- rowSDs(X, weights = weights)
     
     X <- scaleDataWithStats(X, mu, sig) 

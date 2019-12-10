@@ -27,6 +27,14 @@ weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
     mu <- rowMeans(X, weights = weights)
     sig <- rowSDs(X, weights = weights)
     
+    # Added 12/9/19: save weighted scaling means and std devs
+    vargenes_means_sds <- tibble(
+        symbol = genes_use,
+        mean = mu
+    )
+    vargenes_means_sds$stddev <- sig
+    # finish added 12/9/19
+    
     X <- scaleDataWithStats(X, mu, sig) 
     X <- X[which(is.na(rowSums(X)) == 0), ]
     if (do_corr) {
@@ -41,5 +49,5 @@ weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
     row.names(V) <- colnames(X)
     colnames(pres$u) <- paste0('PC', 1:npc)
     row.names(pres$u) <- row.names(X)
-    return(list(loadings = pres$u, embeddings = V))
+    return(list(loadings = pres$u, embeddings = V, vargenes = vargenes_means_sds))
 }

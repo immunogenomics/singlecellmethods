@@ -178,6 +178,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// enrich_dgc
+arma::vec enrich_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& div_vec, int ncol);
+RcppExport SEXP _singlecellmethods_enrich_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP div_vecSEXP, SEXP ncolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type div_vec(div_vecSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    rcpp_result_gen = Rcpp::wrap(enrich_dgc(x, p, i, div_vec, ncol));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_exp_mean", (DL_FUNC) &_singlecellmethods_exp_mean, 7},
@@ -191,6 +206,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_cosine_normalize_cpp", (DL_FUNC) &_singlecellmethods_cosine_normalize_cpp, 2},
     {"_singlecellmethods_soft_kmeans_cpp", (DL_FUNC) &_singlecellmethods_soft_kmeans_cpp, 4},
     {"_singlecellmethods_merge_redundant_clusters", (DL_FUNC) &_singlecellmethods_merge_redundant_clusters, 2},
+    {"_singlecellmethods_enrich_dgc", (DL_FUNC) &_singlecellmethods_enrich_dgc, 5},
     {NULL, NULL, 0}
 };
 

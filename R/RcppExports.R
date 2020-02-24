@@ -45,3 +45,7 @@ merge_redundant_clusters <- function(R, thresh = 0.8) {
     .Call('_singlecellmethods_merge_redundant_clusters', PACKAGE = 'singlecellmethods', R, thresh)
 }
 
+enrich_dgc <- function(x, p, i, div_vec, ncol) {
+    .Call('_singlecellmethods_enrich_dgc', PACKAGE = 'singlecellmethods', x, p, i, div_vec, ncol)
+}
+

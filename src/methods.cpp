@@ -283,6 +283,7 @@ List soft_kmeans_cpp(arma::mat Y, arma::mat Z, unsigned max_iter, float sigma) {
     
 }
 
+
 /*
 // [[Rcpp::export]]
 float Hbeta(arma::mat& D, float beta, arma::vec& P, int idx) {
@@ -378,4 +379,23 @@ arma::mat merge_redundant_clusters(const arma::mat & R, float thresh = 0.8) {
       R_new.row(i) = arma::sum(R.rows(idx), 0);
   }
   return R_new;  
+}
+
+
+// [[Rcpp::export]]
+arma::vec enrich_dgc(const arma::vec& x, const arma::vec& p, 
+                      const arma::vec& i, const arma::vec& div_vec, 
+                      int ncol) {
+    // TODO: move all the indexing from R to C
+    // For all genesets, do a single pass through the matrix
+    arma::vec res = arma::zeros<arma::vec>(ncol);
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+//             x[j] = x[j] / div_vec[i[j]];
+//             if (geneset_mask[i[j]]) {
+                res[c] += x[j] / div_vec[i[j]];
+//             }
+        }
+    }    
+    return res;
 }

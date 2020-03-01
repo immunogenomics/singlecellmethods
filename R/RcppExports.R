@@ -49,3 +49,15 @@ enrich_dgc <- function(x, p, i, div_vec, ncol) {
     .Call('_singlecellmethods_enrich_dgc', PACKAGE = 'singlecellmethods', x, p, i, div_vec, ncol)
 }
 
+safe_entropy <- function(X) {
+    .Call('_singlecellmethods_safe_entropy', PACKAGE = 'singlecellmethods', X)
+}
+
+soft_kmeans_score_cpp <- function(R, w, dist_mat, sigma) {
+    .Call('_singlecellmethods_soft_kmeans_score_cpp', PACKAGE = 'singlecellmethods', R, w, dist_mat, sigma)
+}
+
+soft_kmeans_weighted_cpp <- function(Y, Z, w, max_iter, sigma, tol) {
+    .Call('_singlecellmethods_soft_kmeans_weighted_cpp', PACKAGE = 'singlecellmethods', Y, Z, w, max_iter, sigma, tol)
+}
+

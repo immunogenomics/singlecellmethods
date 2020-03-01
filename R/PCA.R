@@ -1,14 +1,14 @@
 #' @export
-weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
-    if (!identical(length(y), ncol(X))) {
-        stop('Columns in X must match length of y')
+weighted_pca <- function(X, weights, genes_use=NULL, npc=20, do_corr=TRUE, scale_thresh=10) {
+    if (!identical(length(weights), ncol(X))) {
+        stop('Columns in X must match length of weights')
     }
     
-    y <- factor(y)
-    weights <- as.numeric((1 / prop.table(table(y)))[y]) / nlevels(y)
+#     y <- factor(y)
+#     weights <- as.numeric((1 / prop.table(table(y)))[y]) / nlevels(y)
     if (any(is.na(weights))) {
-        idx_keep <- which(is.na(y))
-        y <- y[idx_keep]
+        idx_keep <- which(is.na(weights))
+#         y <- y[idx_keep]
         weights <- weights[idx_keep]
         X <- X[, idx_keep]
     }
@@ -38,11 +38,12 @@ weighted_pca <- function(X, y, genes_use=NULL, npc=20, do_corr=TRUE) {
     X <- scaleDataWithStats(X, mu, sig) 
     X <- X[which(is.na(rowSums(X)) == 0), ]
     if (do_corr) {
-        X <- X %>% scale() %>% pmin(10) %>% pmax(-10)
+        X <- X %>% scale() %>% pmin(scale_thresh) %>% pmax(-scale_thresh)
     }
     
     ## weighted SVD
-    pres <- rsvd::rsvd(X %*% Matrix::Diagonal(x = sqrt(weights)), k = npc)
+#     pres <- rsvd::rsvd(X %*% Matrix::Diagonal(x = sqrt(weights)), k = npc)
+    pres <- RSpectra::svds(X %*% Matrix::Diagonal(x = sqrt(weights)), npc)
     V <- (Matrix::Diagonal(x = 1 / sqrt(weights)) %*% pres$v) %*% diag(pres$d)
     V <- as.matrix(V)
     colnames(V) <- paste0('PC', 1:npc)

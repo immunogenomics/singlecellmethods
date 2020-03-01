@@ -193,6 +193,47 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// safe_entropy
+arma::mat safe_entropy(const arma::mat& X);
+RcppExport SEXP _singlecellmethods_safe_entropy(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(safe_entropy(X));
+    return rcpp_result_gen;
+END_RCPP
+}
+// soft_kmeans_score_cpp
+double soft_kmeans_score_cpp(const arma::mat& R, const arma::rowvec& w, const arma::mat& dist_mat, float sigma);
+RcppExport SEXP _singlecellmethods_soft_kmeans_score_cpp(SEXP RSEXP, SEXP wSEXP, SEXP dist_matSEXP, SEXP sigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type R(RSEXP);
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type w(wSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type dist_mat(dist_matSEXP);
+    Rcpp::traits::input_parameter< float >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(soft_kmeans_score_cpp(R, w, dist_mat, sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
+// soft_kmeans_weighted_cpp
+List soft_kmeans_weighted_cpp(arma::mat Y, arma::mat Z, const arma::rowvec& w, unsigned max_iter, float sigma, float tol);
+RcppExport SEXP _singlecellmethods_soft_kmeans_weighted_cpp(SEXP YSEXP, SEXP ZSEXP, SEXP wSEXP, SEXP max_iterSEXP, SEXP sigmaSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type w(wSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< float >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< float >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(soft_kmeans_weighted_cpp(Y, Z, w, max_iter, sigma, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_exp_mean", (DL_FUNC) &_singlecellmethods_exp_mean, 7},
@@ -207,6 +248,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_soft_kmeans_cpp", (DL_FUNC) &_singlecellmethods_soft_kmeans_cpp, 4},
     {"_singlecellmethods_merge_redundant_clusters", (DL_FUNC) &_singlecellmethods_merge_redundant_clusters, 2},
     {"_singlecellmethods_enrich_dgc", (DL_FUNC) &_singlecellmethods_enrich_dgc, 5},
+    {"_singlecellmethods_safe_entropy", (DL_FUNC) &_singlecellmethods_safe_entropy, 1},
+    {"_singlecellmethods_soft_kmeans_score_cpp", (DL_FUNC) &_singlecellmethods_soft_kmeans_score_cpp, 4},
+    {"_singlecellmethods_soft_kmeans_weighted_cpp", (DL_FUNC) &_singlecellmethods_soft_kmeans_weighted_cpp, 6},
     {NULL, NULL, 0}
 };
 

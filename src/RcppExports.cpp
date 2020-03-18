@@ -108,8 +108,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rowSDs_dgc
-arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& mean_vec, int ncol, int nrow);
-RcppExport SEXP _singlecellmethods_rowSDs_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP ncolSEXP, SEXP nrowSEXP) {
+arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& mean_vec, int ncol, int nrow, bool do_sqrt);
+RcppExport SEXP _singlecellmethods_rowSDs_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP do_sqrtSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -119,13 +119,33 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type mean_vec(mean_vecSEXP);
     Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    rcpp_result_gen = Rcpp::wrap(rowSDs_dgc(x, p, i, mean_vec, ncol, nrow));
+    Rcpp::traits::input_parameter< bool >::type do_sqrt(do_sqrtSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowSDs_dgc(x, p, i, mean_vec, ncol, nrow, do_sqrt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rowVarSDs_dgc
+arma::vec rowVarSDs_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& mean_vec, const arma::vec& sd_vec, double vmax, int ncol, int nrow, bool do_sqrt);
+RcppExport SEXP _singlecellmethods_rowVarSDs_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP sd_vecSEXP, SEXP vmaxSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP do_sqrtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_vec(mean_vecSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type sd_vec(sd_vecSEXP);
+    Rcpp::traits::input_parameter< double >::type vmax(vmaxSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< bool >::type do_sqrt(do_sqrtSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowVarSDs_dgc(x, p, i, mean_vec, sd_vec, vmax, ncol, nrow, do_sqrt));
     return rcpp_result_gen;
 END_RCPP
 }
 // rowSDsWeighted_dgc
-arma::vec rowSDsWeighted_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& mean_vec, const arma::vec& weights, int ncol, int nrow);
-RcppExport SEXP _singlecellmethods_rowSDsWeighted_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP weightsSEXP, SEXP ncolSEXP, SEXP nrowSEXP) {
+arma::vec rowSDsWeighted_dgc(const arma::vec& x, const arma::vec& p, const arma::vec& i, const arma::vec& mean_vec, const arma::vec& weights, int ncol, int nrow, bool do_sqrt);
+RcppExport SEXP _singlecellmethods_rowSDsWeighted_dgc(SEXP xSEXP, SEXP pSEXP, SEXP iSEXP, SEXP mean_vecSEXP, SEXP weightsSEXP, SEXP ncolSEXP, SEXP nrowSEXP, SEXP do_sqrtSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -136,7 +156,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type weights(weightsSEXP);
     Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    rcpp_result_gen = Rcpp::wrap(rowSDsWeighted_dgc(x, p, i, mean_vec, weights, ncol, nrow));
+    Rcpp::traits::input_parameter< bool >::type do_sqrt(do_sqrtSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowSDsWeighted_dgc(x, p, i, mean_vec, weights, ncol, nrow, do_sqrt));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -242,8 +263,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_singlecellmethods_scaleRowsWithStats_dgc", (DL_FUNC) &_singlecellmethods_scaleRowsWithStats_dgc, 8},
     {"_singlecellmethods_scaleRows_dgc", (DL_FUNC) &_singlecellmethods_scaleRows_dgc, 6},
     {"_singlecellmethods_rowMeansWeighted_dgc", (DL_FUNC) &_singlecellmethods_rowMeansWeighted_dgc, 6},
-    {"_singlecellmethods_rowSDs_dgc", (DL_FUNC) &_singlecellmethods_rowSDs_dgc, 6},
-    {"_singlecellmethods_rowSDsWeighted_dgc", (DL_FUNC) &_singlecellmethods_rowSDsWeighted_dgc, 7},
+    {"_singlecellmethods_rowSDs_dgc", (DL_FUNC) &_singlecellmethods_rowSDs_dgc, 7},
+    {"_singlecellmethods_rowVarSDs_dgc", (DL_FUNC) &_singlecellmethods_rowVarSDs_dgc, 9},
+    {"_singlecellmethods_rowSDsWeighted_dgc", (DL_FUNC) &_singlecellmethods_rowSDsWeighted_dgc, 8},
     {"_singlecellmethods_cosine_normalize_cpp", (DL_FUNC) &_singlecellmethods_cosine_normalize_cpp, 2},
     {"_singlecellmethods_soft_kmeans_cpp", (DL_FUNC) &_singlecellmethods_soft_kmeans_cpp, 4},
     {"_singlecellmethods_merge_redundant_clusters", (DL_FUNC) &_singlecellmethods_merge_redundant_clusters, 2},

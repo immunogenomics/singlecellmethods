@@ -25,12 +25,16 @@ rowMeansWeighted_dgc <- function(x, p, i, weights, ncol, nrow) {
     .Call('_singlecellmethods_rowMeansWeighted_dgc', PACKAGE = 'singlecellmethods', x, p, i, weights, ncol, nrow)
 }
 
-rowSDs_dgc <- function(x, p, i, mean_vec, ncol, nrow) {
-    .Call('_singlecellmethods_rowSDs_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, ncol, nrow)
+rowSDs_dgc <- function(x, p, i, mean_vec, ncol, nrow, do_sqrt) {
+    .Call('_singlecellmethods_rowSDs_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, ncol, nrow, do_sqrt)
 }
 
-rowSDsWeighted_dgc <- function(x, p, i, mean_vec, weights, ncol, nrow) {
-    .Call('_singlecellmethods_rowSDsWeighted_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, weights, ncol, nrow)
+rowVarSDs_dgc <- function(x, p, i, mean_vec, sd_vec, vmax, ncol, nrow, do_sqrt) {
+    .Call('_singlecellmethods_rowVarSDs_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, sd_vec, vmax, ncol, nrow, do_sqrt)
+}
+
+rowSDsWeighted_dgc <- function(x, p, i, mean_vec, weights, ncol, nrow, do_sqrt) {
+    .Call('_singlecellmethods_rowSDsWeighted_dgc', PACKAGE = 'singlecellmethods', x, p, i, mean_vec, weights, ncol, nrow, do_sqrt)
 }
 
 cosine_normalize_cpp <- function(V, dim) {

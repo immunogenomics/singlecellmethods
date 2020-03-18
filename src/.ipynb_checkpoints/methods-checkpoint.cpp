@@ -14,7 +14,6 @@ using namespace Rcpp;
 //typedef arma::fvec VECTYPE;
 
 
-
 // [[Rcpp::export]]
 arma::mat exp_mean(const arma::vec& x, const arma::vec& p, const arma::vec& i, int ncol, int nrow, const arma::uvec& groups, const arma::uvec& group_sizes) {
     int ngroups = group_sizes.n_elem;
@@ -202,7 +201,7 @@ arma::vec rowMeansWeighted_dgc(const arma::vec& x, const arma::vec& p,
 // [[Rcpp::export]]
 arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p, 
                      const arma::vec& i, const arma::vec& mean_vec, 
-                     int ncol, int nrow) {
+                     int ncol, int nrow, bool do_sqrt) {
 
     arma::vec sd_vec = arma::zeros<arma::vec>(nrow);
     arma::uvec nz = arma::zeros<arma::uvec>(nrow);
@@ -219,9 +218,44 @@ arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p,
         sd_vec(r) += nz(r) * mean_vec(r) * mean_vec(r);
     }
     
-    sd_vec = arma::sqrt(sd_vec / (ncol - 1));
+    sd_vec = sd_vec / (ncol - 1);
+    if (do_sqrt) {
+        sd_vec = arma::sqrt(sd_vec);
+    }
     
     return sd_vec;    
+}
+
+
+// [[Rcpp::export]]
+arma::vec rowVarSDs_dgc(
+    const arma::vec& x, const arma::vec& p, 
+    const arma::vec& i, const arma::vec& mean_vec, const arma::vec& sd_vec, 
+    double vmax, int ncol, int nrow, bool do_sqrt) {
+
+    arma::vec res = arma::zeros<arma::vec>(nrow);
+    arma::uvec nz = arma::zeros<arma::uvec>(nrow);
+    nz.fill(ncol);
+    double val;
+    for (int c = 0; c < ncol; c++) {
+        for (int j = p[c]; j < p[c + 1]; j++) {
+            val = std::min(vmax, (x[j] - mean_vec(i[j])) / sd_vec(i[j]));
+            res(i[j]) += val * val; // [(x - mu)/sig]^2
+            nz(i[j])--;
+        }
+    }
+    
+    // count for the zeros
+    for (int r = 0; r < nrow; r++) {
+        res(r) += nz(r) * mean_vec(r) * mean_vec(r) / (sd_vec(r) * sd_vec(r));
+    }
+    
+    res = res / (ncol - 1);
+    if (do_sqrt) {
+        res = arma::sqrt(res);
+    }
+    
+    return res;    
 }
 
 
@@ -229,7 +263,7 @@ arma::vec rowSDs_dgc(const arma::vec& x, const arma::vec& p,
 arma::vec rowSDsWeighted_dgc(const arma::vec& x, const arma::vec& p, 
                      const arma::vec& i, const arma::vec& mean_vec, 
                      const arma::vec& weights, 
-                     int ncol, int nrow) {
+                     int ncol, int nrow, bool do_sqrt) {
 
     arma::vec sd_vec = arma::zeros<arma::vec>(nrow);
     double sum_weights = arma::accu(weights);
@@ -248,7 +282,9 @@ arma::vec rowSDsWeighted_dgc(const arma::vec& x, const arma::vec& p,
     }
 
     sd_vec *= sum_weights / (sum_weights * sum_weights - arma::accu(weights % weights));
-    sd_vec = arma::sqrt(sd_vec);
+    if (do_sqrt) {
+        sd_vec = arma::sqrt(sd_vec);
+    }
     return sd_vec;
 }
 
@@ -395,3 +431,6 @@ arma::vec enrich_dgc(const arma::vec& x, const arma::vec& p,
     }    
     return res;
 }
+
+
+

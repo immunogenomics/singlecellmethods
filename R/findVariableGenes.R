@@ -61,3 +61,69 @@ findVariableGenes <- function(X, groups, min_expr = .1, max_expr = Inf,
 #     }
     
 }
+
+
+#' @export
+vargenes_vst <- function(object, groups, topn, loess.span = 0.3) {
+    clip.max <- sqrt(ncol(object))
+
+    N <- ncol(object)
+    if (missing(groups)) {
+        groups <- rep('A', N)
+    }
+    
+    res <- split(seq_len(N), groups) %>% lapply(function(idx) {
+        object_group <- object[, idx]
+        ## row means
+        hvf.info <- data.frame(mean = Matrix::rowMeans(object_group))
+
+        ## row vars
+        hvf.info$variance <- rowVars(object_group, hvf.info$mean)
+
+        ## initialize
+        hvf.info$variance.expected <- 0
+        hvf.info$variance.standardized <- 0
+
+        not.const <- hvf.info$variance > 0
+
+        ## loess curve fit 
+        suppressWarnings({
+            fit <- loess(formula = log10(variance) ~ log10(mean), 
+                data = hvf.info[not.const, ], span = loess.span)            
+        })
+
+        ## extract fitted variance 
+        hvf.info$variance.expected[not.const] <- 10^fit$fitted
+
+        ## get row standard deviations after clipping
+        hvf.info$variance.standardized <- rowVarsStd(
+            object_group, 
+            hvf.info$mean, 
+            sqrt(hvf.info$variance.expected), 
+            clip.max
+        )
+
+        hvf.info <- hvf.info %>% 
+            tibble::rownames_to_column('symbol') %>% 
+            arrange(-variance.standardized) %>% 
+            tibble::rowid_to_column('rank') %>% 
+            transform(group = unique(groups[idx]))
+
+        return(hvf.info)        
+    })
+    
+    
+    if (missing(topn)) {
+        ## MODE 1: return table 
+        res <- Reduce(rbind, res) %>% 
+            dplyr::select(group, symbol, rank, everything())
+
+        if (length(unique(res$group)) == 1) {
+            res$group <- NULL
+        }
+    } else {
+        ## MODE 2: return genes
+        res <- Reduce(union, lapply(res, function(x) head(x, topn)$symbol))
+    }
+    return(res)
+}

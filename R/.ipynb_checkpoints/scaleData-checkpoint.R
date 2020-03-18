@@ -34,13 +34,41 @@ rowSDs <- function(A, row_means=NULL, weights=NULL) {
         row_means <- singlecellmethods::rowMeans(A, weights)
     }
     if (is.null(weights)) {
-        res <- as.numeric(rowSDs_dgc(A@x, A@p, A@i, row_means, ncol(A), nrow(A)))
+        res <- as.numeric(rowSDs_dgc(A@x, A@p, A@i, row_means, ncol(A), nrow(A), TRUE))
     } else {
-        res <- as.numeric(rowSDsWeighted_dgc(A@x, A@p, A@i, row_means, weights, ncol(A), nrow(A)))
+        res <- as.numeric(rowSDsWeighted_dgc(A@x, A@p, A@i, row_means, weights, ncol(A), nrow(A), TRUE))
     }
     names(res) <- row.names(A)
     return(res)
 }
+
+#' @export
+rowVarsStd <- function(A, row_means, row_sds, vmax, weights=NULL) {
+    if (is.null(weights)) {
+        res <- as.numeric(rowVarSDs_dgc(A@x, A@p, A@i, row_means, row_sds, vmax, ncol(A), nrow(A), FALSE))
+    } 
+#     else {
+#         res <- as.numeric(rowSDsWeighted_dgc(A@x, A@p, A@i, row_means, weights, ncol(A), nrow(A), TRUE))
+#     }
+    names(res) <- row.names(A)
+    return(res)
+}
+
+
+#' @export
+rowVars <- function(A, row_means=NULL, weights=NULL) {
+    if (is.null(row_means)) {
+        row_means <- singlecellmethods::rowMeans(A, weights)
+    }
+    if (is.null(weights)) {
+        res <- as.numeric(rowSDs_dgc(A@x, A@p, A@i, row_means, ncol(A), nrow(A), FALSE))
+    } else {
+        res <- as.numeric(rowSDsWeighted_dgc(A@x, A@p, A@i, row_means, weights, ncol(A), nrow(A), FALSE))
+    }
+    names(res) <- row.names(A)
+    return(res)
+}
+
 
 #' @export
 rowMeans <- function(A, weights=NULL) {

@@ -75,7 +75,10 @@ vargenes_vst <- function(object, groups, topn, loess.span = 0.3) {
     res <- split(seq_len(N), groups) %>% lapply(function(idx) {
         object_group <- object[, idx]
         ## row means
-        hvf.info <- data.frame(mean = Matrix::rowMeans(object_group))
+        hvf.info <- data.frame(
+          symbol = rownames(object_group), 
+          mean = Matrix::rowMeans(object_group)
+        )
 
         ## row vars
         hvf.info$variance <- rowVars(object_group, hvf.info$mean)
@@ -104,7 +107,7 @@ vargenes_vst <- function(object, groups, topn, loess.span = 0.3) {
         )
 
         hvf.info <- hvf.info %>% 
-            tibble::rownames_to_column('symbol') %>% 
+#             tibble::rownames_to_column('symbol') %>% 
             arrange(-variance.standardized) %>% 
             tibble::rowid_to_column('rank') %>% 
             transform(group = unique(groups[idx]))

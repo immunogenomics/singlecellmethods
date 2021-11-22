@@ -50,6 +50,7 @@ weighted_pca <- function(X, weights, genes_use=NULL, npc=20, do_corr=TRUE, scale
 
 
 ## Wrapper to Seurat objects
+#' @export
 RunBalancedPCA <- function(obj, weight.by='orig.ident', npcs=20, assay.use='RNA', reduction.name = "pca", reduction.key = "PC_") {
     if (!weight.by %in% colnames(obj@meta.data)) 
         stop(glue('Variable {weight.by} not defined in this object'))

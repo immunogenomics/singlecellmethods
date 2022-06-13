@@ -25,7 +25,7 @@ weighted_pca <- function(X, weights, genes_use=NULL, npc=20, do_corr=TRUE, scale
     mu <- rowMeans(X, weights = weights)
     sig <- rowSDs(X, weights = weights)
     
-    vargenes_means_sds <- tibble(
+    vargenes_means_sds <- tibble::tibble(
         symbol = genes_use,
         mean = mu
     )

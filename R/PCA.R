@@ -12,7 +12,7 @@ weighted_pca <- function(X, weights, genes_use=NULL, npc=20, do_corr=TRUE, scale
         weights <- weights[idx_keep]
         X <- X[, idx_keep]
     }
-    if (is.null(genes_use)) {
+    if (is_empty(genes_use)) {
         genes_use <- row.names(X)
     } else if (length(genes_use) < nrow(X)) {
         if (any(!genes_use %in% row.names(X))) {

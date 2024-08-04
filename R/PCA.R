@@ -51,7 +51,12 @@ weighted_pca <- function(X, weights, genes_use=NULL, npc=20, do_corr=TRUE, scale
 
 ## Wrapper to Seurat objects
 #' @export
-RunBalancedPCA <- function(obj, weight.by='orig.ident', npcs=20, assay.use='RNA', reduction.name = "pca", reduction.key = "PC_") {
+RunBalancedPCA <- function(obj, weight.by='orig.ident', npcs=20, assay.use='RNA', reduction.name = "pca", reduction.key = "PC_", features=NULL) {
+    if (is.null(features)) {
+        # features = rownames(obj)
+        features = obj@assays[[assay.use]]@var.features
+    }
+    
     if (!weight.by %in% colnames(obj@meta.data)) 
         stop(glue('Variable {weight.by} not defined in this object'))
     if (length(unique(obj@meta.data[[weight.by]])) == 1) 
@@ -64,9 +69,10 @@ RunBalancedPCA <- function(obj, weight.by='orig.ident', npcs=20, assay.use='RNA'
     pca_res <- weighted_pca(
         obj@assays[[assay.use]]@data, 
         weights, 
-        obj@assays[[assay.use]]@var.features,
+        features, 
         npcs,
-        scale_thresh=10
+        scale_thresh=10, 
+        do_corr=FALSE
     )
 
     ## Put it back into Seurat 

@@ -1,7 +1,9 @@
 #' @export
-normalizeData <- function(A, scaling_factor = 1e4, method) {
+normalizeData <- function(A, scaling_factor=NULL, method='log') {
     if(!'dgCMatrix' %in% class(A)) A <- as(A, "dgCMatrix")
-    
+    if (is.null(scaling_factor)) {
+	scaling_factor = median(Matrix::colSums(A))
+    }
     if (method == "log") {
         A@x <- A@x / rep.int(Matrix::colSums(A), diff(A@p))
         A@x <- scaling_factor * A@x

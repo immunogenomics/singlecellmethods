@@ -1,5 +1,10 @@
 #' @export
-weighted_pca <- function(X, weights, genes_use=NULL, npc=20, do_corr=TRUE, scale_thresh=10) {
+weighted_pca <- function(X, weights=NULL, genes_use=NULL, npc=20, do_corr=FALSE, scale_thresh=10) {
+    if (is.null(weights)) {
+        ## Do without weighting 
+        weights = rep(1, ncol(X))
+    }
+    
     if (!identical(length(weights), ncol(X))) {
         stop('Columns in X must match length of weights')
     }

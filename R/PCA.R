@@ -18,6 +18,10 @@ weighted_pca <- function(X, weights=NULL, genes_use=NULL, npc=20, do_corr=FALSE,
         X <- X[, idx_keep]
     }
     if (is_empty(genes_use)) {
+        warning(
+            'genes_use is not set: using all ', nrow(X), ' genes for PCA. ',
+            'Consider passing a set of highly variable genes via genes_use.'
+        )
         genes_use <- row.names(X)
     } else if (length(genes_use) < nrow(X)) {
         if (any(!genes_use %in% row.names(X))) {
